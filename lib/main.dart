@@ -10,6 +10,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,12 +21,14 @@ class MyApp extends StatelessWidget {
 }
 
 class GameScreen extends StatelessWidget {
+  const GameScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final gameState = Provider.of<GameState>(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text('Card Matching Game')),
+      appBar: AppBar(title: const Text('Card Matching Game')),
       body: Column(
         children: [
           TimerWidget(),
@@ -33,7 +37,7 @@ class GameScreen extends StatelessWidget {
           if (gameState.isGameWon())
             Container(
               color: Colors.black54,
-              child: Center(
+              child: const Center(
                 child: Text(
                   'You Win!',
                   style: TextStyle(fontSize: 30, color: Colors.white),
@@ -47,12 +51,14 @@ class GameScreen extends StatelessWidget {
 }
 
 class CardGrid extends StatelessWidget {
+  const CardGrid({super.key});
+
   @override
   Widget build(BuildContext context) {
     final gameState = Provider.of<GameState>(context);
 
     return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 4,
       ),
       itemCount: gameState.cards.length,
@@ -66,7 +72,7 @@ class CardGrid extends StatelessWidget {
 class CardWidget extends StatelessWidget {
   final CardModel card;
 
-  CardWidget({required this.card});
+  const CardWidget({super.key, required this.card});
 
   @override
   Widget build(BuildContext context) {
@@ -77,12 +83,12 @@ class CardWidget extends StatelessWidget {
         gameState.flipCard(card);
       },
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         child: Card(
           child: Center(
             child: Text(
               card.isFaceUp ? card.front : '🃏',
-              style: TextStyle(fontSize: 30),
+              style: const TextStyle(fontSize: 30),
             ),
           ),
         ),
@@ -109,7 +115,7 @@ class GameState extends ChangeNotifier {
   }
 
   void _initializeCards() {
-    List<String> cardFaces = ['A', 'B', 'C', 'D'];
+    List<String> cardFaces = ['1', '2', '3', '4'];
     for (String face in cardFaces) {
       cards.add(CardModel(front: face, back: '🃏'));
       cards.add(CardModel(front: face, back: '🃏'));
@@ -134,10 +140,10 @@ class GameState extends ChangeNotifier {
       score++;
       faceUpCards.clear();
     } else {
-      Future.delayed(Duration(seconds: 1), () {
-        faceUpCards.forEach((card) {
+      Future.delayed(const Duration(seconds: 1), () {
+        for (var card in faceUpCards) {
           card.isFaceUp = false;
-        });
+        }
         faceUpCards.clear();
         notifyListeners();
       });
@@ -150,6 +156,8 @@ class GameState extends ChangeNotifier {
 }
 
 class TimerWidget extends StatefulWidget {
+  const TimerWidget({super.key});
+
   @override
   _TimerWidgetState createState() => _TimerWidgetState();
 }
@@ -159,7 +167,7 @@ class _TimerWidgetState extends State<TimerWidget> {
   int _start = 0;
 
   void startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         _start++;
       });
@@ -174,7 +182,7 @@ class _TimerWidgetState extends State<TimerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Text('Time: $_start seconds', style: TextStyle(fontSize: 20));
+    return Text('Time: $_start seconds', style: const TextStyle(fontSize: 20));
   }
 
   @override
@@ -185,9 +193,12 @@ class _TimerWidgetState extends State<TimerWidget> {
 }
 
 class ScoreWidget extends StatelessWidget {
+  const ScoreWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     final gameState = Provider.of<GameState>(context);
-    return Text('Score: ${gameState.score}', style: TextStyle(fontSize: 20));
+    return Text('Score: ${gameState.score}',
+        style: const TextStyle(fontSize: 20));
   }
 }
